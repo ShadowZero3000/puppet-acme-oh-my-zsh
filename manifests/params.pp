@@ -1,7 +1,7 @@
 class ohmyzsh::params {
   case $::operatingsystem {
     Darwin: {
-      $zsh = '/usr/bin/zsh',
+      $zsh = '/usr/bin/zsh'
       $home = '/Users'
     },
     default: {
