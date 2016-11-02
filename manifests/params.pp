@@ -3,7 +3,7 @@ class ohmyzsh::params {
     Darwin: {
       $zsh = '/usr/bin/zsh'
       $home = '/Users'
-    },
+    }
     default: {
       $zsh = '/usr/bin/zsh'
       $home = '/home'
