@@ -25,7 +25,9 @@
 #
 # Copyright 2013 Leon Brocard
 #
-define ohmyzsh::install() {
+define ohmyzsh::install(
+  $update_user = true,
+) {
   if $name == 'root' { $home = '/root' } else { $home = "${ohmyzsh::params::home}/${name}" }
   exec { "ohmyzsh::git clone ${name}":
     creates => "${home}/.oh-my-zsh",
@@ -41,17 +43,19 @@ define ohmyzsh::install() {
     require => Exec["ohmyzsh::git clone ${name}"],
   }
 
-  if ! defined(User[$name]) {
-    user { "ohmyzsh::user ${name}":
-      ensure     => present,
-      name       => $name,
-      managehome => true,
-      shell      => $ohmyzsh::params::zsh,
-      require    => Package['zsh'],
-    }
-  } else {
-    User <| title == $name |> {
-      shell => $ohmyzsh::params::zsh
+  if $update_user {
+    if ! defined(User[$name]) {
+      user { "ohmyzsh::user ${name}":
+        ensure     => present,
+        name       => $name,
+        managehome => true,
+        shell      => $ohmyzsh::params::zsh,
+        require    => Package['zsh'],
+      }
+    } else {
+      User <| title == $name |> {
+        shell => $ohmyzsh::params::zsh
+      }
     }
   }
 }
